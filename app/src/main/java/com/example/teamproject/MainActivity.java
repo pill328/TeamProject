@@ -197,12 +197,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         }
 
-        if(title.equals("konkuk univ"))
-            showAllRestaurantKonkuk();
-
-        if(title.equals("hongik univ"))
-            showAllRestaurantHongik();
-
+//        if(title.equals("konkuk univ"))
+//            showAllRestaurantKonkuk();
+//        if(title.equals("hongik univ"))
+//            showAllRestaurantHongik();
+        switch (title.toString()){
+            case "konkuk univ":
+                showAllRestaurantKonkuk();
+            case "hongik univ":
+                showAllRestaurantHongik();
+            default:
+                break;
+        }
         hideSoftKeyboard();
     }
 
