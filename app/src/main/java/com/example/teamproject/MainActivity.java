@@ -60,9 +60,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Boolean mLocationPermissionsGranted = false;
 
     // connect
-    private TextView tv_outPut;
-    String url = "";
-    String info;
+
 
 
     @Override
@@ -91,11 +89,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Intent intent = new Intent(getBaseContext(), Scene2.class);
                     startActivity(intent);
 
-                    // AsyncTask를 통해 HttpURLConnection 수행
-                    tv_outPut = (TextView) findViewById(R.id.tv_outPut);
-
-                    NetworkTask networkTask = new NetworkTask(url,null);
-                    networkTask.execute();
                 }
             });
         }
@@ -348,34 +341,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    public class NetworkTask extends AsyncTask<Void, Void, String> {
-
-        private String url;
-        private ContentValues values;
-
-        public NetworkTask(String url, ContentValues values) {
-
-            this.url = url;
-            this.values = values;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-
-            String result;
-            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
-            result = requestHttpURLConnection.request(url, values);
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-
-            //doInBackground()로 부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력
-            super.onPostExecute(s);
-            tv_outPut.setText(s);
-        }
-    }
 
     private void hideSoftKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);

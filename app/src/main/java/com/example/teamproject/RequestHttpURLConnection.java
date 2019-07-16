@@ -1,6 +1,7 @@
 package com.example.teamproject;
 
 import android.content.ContentValues;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +14,8 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Map;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 public class RequestHttpURLConnection {
 
     public String request(String _url, ContentValues _params){
@@ -23,10 +26,11 @@ public class RequestHttpURLConnection {
         StringBuffer sbParams = new StringBuffer();
 
         // 보낼 데이터가 없으면 파라미터를 비운다.
-        if (_params == null)
+        if (_params == null) {
             sbParams.append("");
+
             // 보낼 데이터가 있으면 파라미터를 채운다.
-        else {
+        }else {
             // 파라미터가 2개 이상이면 파라미터 연결에 &가 필요하므로 스위칭할 변수 생성.
             boolean isAnd = false;
             // 파라미터 키와 값.
@@ -48,28 +52,33 @@ public class RequestHttpURLConnection {
                     if (_params.size() >= 2)
                         isAnd = true;
             }
+
         }
 
          // HttpURLConnection을 통해 web의 데이터를 가져온다.
         try{
+            _url = _url + sbParams.toString();
             URL url = new URL(_url);
             urlConn = (HttpURLConnection) url.openConnection();
 
             // [2-1]. urlConn 설정.
             urlConn.setReadTimeout(1000);   // 읽어 들일 시 연결 시간, 서버를 보호하기위한 설정
             urlConn.setConnectTimeout(1000);  // 서버 접속시 연결 시간
-            urlConn.setRequestMethod("POST"); // URL 요청에 대한 메소드 설정 : POST.
+            urlConn.setRequestMethod("GET"); // URL 요청에 대한 메소드 설정 : POST.
+            urlConn.setDoInput(true);
+       //     urlConn.setDoOutput(true);
             urlConn.setRequestProperty("Accept", "application/json");
             urlConn.setRequestProperty("Context_Type", "application/json");
             // urlConn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset 설정.
             // urlConn.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;cahrset=UTF-8");
 
-            // [2-2]. parameter 전달 및 데이터 읽어오기.
-            String strParams = sbParams.toString(); //sbParams에 정리한 파라미터들을 스트링으로 저장. 예)id=id1&pw=123;
-            OutputStream os = urlConn.getOutputStream();
-            os.write(strParams.getBytes("UTF-8")); // 출력 스트림에 출력.
-            os.flush(); // 출력 스트림을 플러시(비운다)하고 버퍼링 된 모든 출력 바이트를 강제 실행.
-            os.close(); // 출력 스트림을 닫고 모든 시스템 자원을 해제.
+//            // [2-2]. parameter 전달 및 데이터 읽어오기.
+//            String strParams = sbParams.toString(); //sbParams에 정리한 파라미터들을 스트링으로 저장. 예)id=id1&pw=123;
+//            Log.d(TAG,url.toString());
+//            OutputStream os = urlConn.getOutputStream();
+//            os.write(strParams.getBytes("UTF-8")); // 출력 스트림에 출력.
+//            os.flush(); // 출력 스트림을 플러시(비운다)하고 버퍼링 된 모든 출력 바이트를 강제 실행.
+//            os.close(); // 출력 스트림을 닫고 모든 시스템 자원을 해제.
 
             // [2-3]. 연결 요청 확인.
             // 실패 시 null을 리턴하고 메서드를 종료.
